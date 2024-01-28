@@ -1,0 +1,2 @@
+include src/pyproj/data/setup.py
+# recursive-include src/project *.*

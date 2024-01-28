@@ -1,0 +1,41 @@
+#!/usr/bin/env python
+import argparse
+from pathlib import Path
+from pyproj import setup_pfile
+
+def cmd():
+    parser = argparse.ArgumentParser('create empty python package...')
+    parser.add_argument('-n', '--package_name', help='input package name')
+
+    return parser
+
+def new_pack(opt):
+    package_name = Path(opt.package_name)
+    if package_name.exists():
+        raise RuntimeError('%s is already exists' % opt.package_name)
+    if '.' in package_name.as_posix():
+        raise RuntimeError(f'{opt.package_name} have illegal symbol[.]')
+    package_name.mkdir(parents=True, exist_ok=True)
+    package_name.joinpath('scripts').mkdir(parents=True, exist_ok=True)
+    package_name.joinpath('src', package_name.name).mkdir(parents=True, exist_ok=True)
+    package_name.joinpath('src', package_name.name, '__init__.py').open('w').close()
+
+    temp_strs = '# include src/project/*\n# recursive-include src/project *.*'
+    package_name.joinpath('MANIFEST.in').open('w').write(temp_strs)
+
+    with setup_pfile.open('r') as f, package_name.joinpath('setup.py').open('w') as w:
+        for line in f:
+            if 'name=\'\'' in line:
+                line = line.replace('name=\'\'', f'name=\'{package_name.name}\'')
+            w.write(line)
+
+    print('project create in %s' % opt.package_name)
+
+
+if __name__ == '__main__':
+    parser = cmd()
+    opt = parser.parse_args()
+    if not opt.package_name:
+        parser.print_help()
+        exit(1)
+    new_pack(opt)
