@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 # Copyright 2019 Vivo Inc. All Rights Reserved.
 # @Time             : 2019/10/20 8:59 AM
@@ -12,7 +11,7 @@ setup(name='',  # 包名
       description='',
       long_description='',
       author='zhifeng.ding',
-      author_email='zhifeng.ding@vivo.com',
+      author_email='zhifeng.ding@hqu.edu.cn',
       url='',
       license='',
       install_requires=[],
